@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.CommentController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox alignment="CENTER" style="-fx-background-color: purple;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="title" text="Commentaires" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="retour" mnemonicParsing="false" onAction="#addretour" prefHeight="23.0" prefWidth="35.0">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="42.0">
+                           <image>
+                              <Image url="@retour.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <effect>
+                        <ColorAdjust brightness="-0.29" contrast="0.92" />
+                     </effect>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <TableView fx:id="tv" maxWidth="500.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="colname" minWidth="500.0" prefWidth="-1.0" text="Recettes" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="voir" mnemonicParsing="false" onAction="#see" text="voir" />
+                  <TextArea fx:id="area" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" right="20.0" top="20.0" />
+               </BorderPane.margin>
+            </HBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

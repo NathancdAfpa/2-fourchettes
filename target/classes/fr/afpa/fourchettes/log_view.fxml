@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.LogController">
+   <children>
+      <BorderPane style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: pink; -fx-border-style: solid; -fx-border-width: 2;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="logo" fitHeight="182.0" fitWidth="184.0" HBox.hgrow="ALWAYS">
+                     <image>
+                        <Image url="@2-Fourchettes-Logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="title" prefHeight="66.0" prefWidth="438.0" text="Les 2 Fourchettes" textFill="#7e7676">
+                     <font>
+                        <Font name="System Bold Italic" size="45.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="807.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" maxHeight="450.0" spacing="25.0" style="-fx-background-color: c2fd9e; -fx-border-style: solid; -fx-border-width: 2;">
+                     <children>
+                        <HBox alignment="BOTTOM_CENTER" spacing="20.0">
+                           <children>
+                              <Label fx:id="id" text="Identifiant :">
+                                 <font>
+                                    <Font size="33.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tId" prefHeight="53.0" prefWidth="318.0" style="-fx-border-style: solid; -fx-border-width: 2;" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="20.0">
+                           <children>
+                              <Label fx:id="mdp" text="Mot de passe :">
+                                 <font>
+                                    <Font size="33.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tMdp" onAction="#cansee" prefHeight="51.0" prefWidth="318.0" style="-fx-border-style: solid; -fx-border-width: 2;" />
+                              <Button fx:id="see" mnemonicParsing="false" onAction="#cansee">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <ImageView fitHeight="13.0" fitWidth="13.0" scaleX="3.0" scaleY="3.0" scaleZ="3.0">
+                                       <image>
+                                          <Image url="@viewPass.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="498.0" spacing="20.0">
+                           <children>
+                              <Button fx:id="btLog" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#addLog" text="Se Connecter">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="register" mnemonicParsing="false" onAction="#addregister" text="S'inscrire" textFill="#02289c" underline="true">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="55.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="100.0" right="100.0" top="20.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </center>
+         <bottom>
+            <BorderPane BorderPane.alignment="CENTER">
+               <center>
+                  <ImageView fx:id="rest" fitHeight="336.0" fitWidth="807.0" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@restoo.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                     <effect>
+                        <ColorAdjust brightness="-0.64" contrast="1.0" saturation="-0.02" />
+                     </effect>
+                  </ImageView>
+               </center>
+               <top>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-style: solid; -fx-background-color: ABE7FA; -fx-border-width: 2;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Page de Connexion">
+                           <font>
+                              <Font size="58.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </top>
+            </BorderPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

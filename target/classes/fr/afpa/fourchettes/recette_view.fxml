@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.EditionRecetteController">
+   <children>
+      <BorderPane prefWidth="1018.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0" style="-fx-background-color: cyan;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="logo" fitHeight="120.0" fitWidth="116.0">
+                     <image>
+                        <Image url="@2-Fourchettes-Logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="title" contentDisplay="CENTER" prefHeight="127.0" prefWidth="420.0" text="Édition de la recette" textFill="#202020d1">
+                     <font>
+                        <Font name="System Bold Italic" size="45.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <HBox prefWidth="1018.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="142.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox fx:id="checkEntree" mnemonicParsing="false" text="entrée" />
+                                    <CheckBox fx:id="checkPlat" mnemonicParsing="false" text="plat" />
+                                    <CheckBox fx:id="checkDessert" mnemonicParsing="false" text="dessert" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox spacing="20.0">
+                                 <children>
+                                    <Label fx:id="nom" text="Nom :">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="time" text="temps de préparation :">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="nbCouverts" text="Nombre de couverts :">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="vege" text="Végétarien :">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="ajout" mnemonicParsing="false" onAction="#addAjout" text="Ajouter">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Button fx:id="retour" mnemonicParsing="false" onAction="#addretour" prefHeight="18.0" prefWidth="27.0">
+                                       <graphic>
+                                          <ImageView fitHeight="21.0" fitWidth="24.0" scaleX="3.0" scaleY="3.0" scaleZ="3.0">
+                                             <image>
+                                                <Image url="@retour.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="225.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="694.0" prefWidth="150.0" spacing="24.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TextField fx:id="tNom" alignment="CENTER" />
+                              <TextField fx:id="tTime" alignment="CENTER" />
+                              <TextField fx:id="TnbrCouverts" alignment="CENTER" />
+                              <HBox prefHeight="30.0" prefWidth="159.0" spacing="100.0">
+                                 <children>
+                                    <RadioButton fx:id="yes" mnemonicParsing="false" prefHeight="22.0" prefWidth="62.0" text="Oui" />
+                                    <RadioButton fx:id="no" mnemonicParsing="false" text="Non" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="130.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="plus" mnemonicParsing="false" onAction="#addIngredient" prefHeight="40.0" prefWidth="43.0" text="+" />
+                        <VBox spacing="15.0">
+                           <children>
+                              <TableView fx:id="tvIng" editable="true" prefHeight="400.0" prefWidth="390.0">
+                                <columns>
+                                  <TableColumn fx:id="colname" prefWidth="79.0" text="Nom" />
+                                  <TableColumn fx:id="colquantity" prefWidth="78.0" text="Quantité" />
+                                    <TableColumn fx:id="colUnit" prefWidth="70.0" text="unité" />
+                                </columns>
+                              </TableView>
+                              <TextArea fx:id="preparation" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <TextArea fx:id="area" editable="false" prefHeight="540.0" prefWidth="338.0" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextArea>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
