@@ -2,9 +2,6 @@ package fr.afpa.fourchettes;
 
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import javafx.util.Callback;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -88,6 +85,8 @@ public class DAOCommentaire extends DAO<Commentaire> {
         
     }
 
+
+
     public ArrayList<Commentaire> findByCommentaire(Commentaire commentaire) {
         try {
             ArrayList<Commentaire> commentaires = new ArrayList<Commentaire>();
@@ -170,7 +169,7 @@ public class DAOCommentaire extends DAO<Commentaire> {
         return commentaires;
     }
     
-    public Commentaire delete(int id) {
+    public void delete(int id) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres", "Nathan17340!");
             PreparedStatement statement = connection.prepareStatement("DELETE FROM commentaire WHERE id_commentaire = ?");
@@ -181,12 +180,10 @@ public class DAOCommentaire extends DAO<Commentaire> {
             }
             statement.close();
             connection.close();
-            return new Commentaire(affectedRows, null, affectedRows, null, affectedRows, affectedRows);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
     public void deleteByRecetteId(int recetteId) {

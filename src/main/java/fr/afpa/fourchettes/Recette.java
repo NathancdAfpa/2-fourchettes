@@ -1,7 +1,5 @@
 package fr.afpa.fourchettes;
 
-import java.sql.Time;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -13,23 +11,42 @@ public class Recette {
     private int nombreCouverts;
     private StringProperty name;
     private StringProperty typeRecette;
-    private int iDcreateur;
     private boolean vegeOuPas;
     private StringProperty preparation;
+    private Double moyenne;
+    private Utilisateur createur;
 
     public Recette(int id, int restoId, int prepareTime, int nombreCouverts, String name,
-            String typeRecette, int iDcreateur, boolean vegeOuPas, String preparation) {
+            String typeRecette, boolean vegeOuPas, String preparation,
+            Double moyenne, Utilisateur createur) {
         this.id = id;
         this.restoId = restoId;
         this.prepareTime = prepareTime;
         this.nombreCouverts = nombreCouverts;
         this.typeRecette = new SimpleStringProperty(typeRecette);
         this.name = new SimpleStringProperty(name);
-        this.iDcreateur = iDcreateur;
         this.vegeOuPas = vegeOuPas;
         this.preparation = new SimpleStringProperty(preparation);
+        this.moyenne = moyenne;
+        this.createur = createur;
 
     }
+
+    public Recette(int restoId, int prepareTime, int nombreCouverts, String name,
+            String typeRecette, boolean vegeOuPas, String preparation, 
+            Double moyenne, Utilisateur createur) {
+        this.restoId = restoId;
+        this.prepareTime = prepareTime;
+        this.nombreCouverts = nombreCouverts;
+        this.typeRecette = new SimpleStringProperty(typeRecette);
+        this.name = new SimpleStringProperty(name);
+        this.vegeOuPas = vegeOuPas;
+        this.preparation = new SimpleStringProperty(preparation);
+        this.moyenne = moyenne;
+        this.createur = createur;
+    }
+
+
 
     public StringProperty nameProperty() {
         return name;
@@ -99,21 +116,34 @@ public class Recette {
         this.preparation.set(preparation);
     }
 
-    public int getCreateur() {
-        return iDcreateur;
+    public Utilisateur getCreateur() {
+        return createur;
     }
 
-    public void setCreateur(int createur) {
-        this.iDcreateur = iDcreateur;
-    }
-
-    public boolean getVegeOuPas() {
+    public Boolean getVegeOuPas() {
         return vegeOuPas;
+        // ?
+        // "Végétarien" : "Non végétarien";
     }
 
     public void setVegeOuPas(Boolean vegeOuPas) {
         this.vegeOuPas = vegeOuPas;
+
     }
+
+    public Double getMoyenne() {
+        return moyenne;
+    }
+
+    public void setMoyenne(Double moyenne) {
+        this.moyenne = moyenne;
+    }
+
+    public void setCreateur(Utilisateur createur) {
+        this.createur = createur;
+    }
+
+    
 
     // @Override
     // public String toString() {

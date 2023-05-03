@@ -2,9 +2,6 @@ package fr.afpa.fourchettes;
 
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import javafx.util.Callback;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,7 +19,7 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
                     "Nathan17340!");
             Statement stm;
             stm = connection.createStatement();
-            String selectUsers = "select * from utilisateur where id = " + id;
+            String selectUsers = "select * from utilisateur where id_user = " + id;
             ResultSet resultat = stm.executeQuery(selectUsers);
             String resultString = "";
             while (resultat.next()) {
@@ -48,6 +45,32 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public ArrayList<Utilisateur> findByRecette(Recette recette) {
+        ArrayList<Utilisateur> utilisateurs = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres", "Nathan17340!");
+            String query = "SELECT * FROM utilisateur WHERE id_recette = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, recette.getId());
+            ResultSet resultSet = statement.executeQuery();
+    
+            while (resultSet.next()) {
+                int idUser = resultSet.getInt("id_user");
+                String identifiant = resultSet.getString("identifiant");
+                int idresto = resultSet.getInt("id_restaurant");
+                String lastName = resultSet.getString("last_name");
+                String firstName = resultSet.getString("first_name");
+                String password = resultSet.getString("password");
+    
+                Utilisateur utilisateur = new Utilisateur(idUser, identifiant, idresto, lastName, firstName, password);
+                utilisateurs.add(utilisateur);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return utilisateurs;
     }
 
     @Override
@@ -119,7 +142,7 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
         return null;
     }
 
-    public Utilisateur delete(int id) {
+    public void delete(int id) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
                     "postgres", "Nathan17340!");
@@ -131,12 +154,12 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
             }
             statement.close();
             connection.close();
-            return new Utilisateur(affectedRows, null, affectedRows, null, null, null);
+         
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        return null;
+       
     }
 
     public Utilisateur insert(Utilisateur newutilisateur) {
@@ -144,13 +167,16 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
                 "Nathan17340!")) {
 
             // Préparer la requête SQL d'insertion
-            String sql = "INSERT INTO utilisateur (identifiant, last_name, first_name, password) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO utilisateur (identifiant, last_name, first_name, password, id_restaurant) VALUES ( ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setString(1, newutilisateur.getIdentifiant());
             pstmt.setString(2, newutilisateur.getLastName());
             pstmt.setString(3, newutilisateur.getFirstName());
             pstmt.setString(4, newutilisateur.getPassword());
+            pstmt.setInt(5, newutilisateur.getRestoId());
+
+
             // Exécuter la requête SQL d'insertion et récupérer l'identifiant de la nouvelle
             // station
             int affectedRows = pstmt.executeUpdate();
@@ -175,7 +201,7 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
 
     public Utilisateur getUtilisateurById(String id) {
         String query = "SELECT * FROM utilisateur WHERE identifiant = ?";
-        Utilisateur utilisateur = null;
+        Utilisateur utilisateur = new Utilisateur(0, query, 0, query, query, query);
 
         try {
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
@@ -193,6 +219,7 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
                 String firstName = rs.getString("first_name");
                 String restoName = rs.getString("resto_name");
                 String password = rs.getString("password");
+
                 utilisateur = new Utilisateur(idUser, identifiant, idresto, lastName, firstName, password);
             }
         } catch (SQLException e) {
@@ -200,6 +227,46 @@ public class DAOUtilisateur extends DAO<Utilisateur> {
         }
 
         return utilisateur;
+    }
+
+    public void setPhotoPath(String id, String photoPath) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
+        "Nathan17340!");
+        String query = "UPDATE utilisateur SET photoPath = ? WHERE identifiant = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, photoPath);
+        statement.setString(2, id);
+        statement.executeUpdate();
+        connection.close();
+    }
+
+    public String getPhotoPath(String id) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
+        "Nathan17340!");
+        String query = "SELECT photoPath FROM utilisateur WHERE identifiant = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        String photoPath = null;
+        if (resultSet.next()) {
+            photoPath = resultSet.getString("photoPath");
+        }
+        connection.close();
+        return photoPath;
+    }
+
+    public void updateUtilisateur(Utilisateur utilisateur) throws SQLException {
+        
+        String sql = "UPDATE utilisateur SET password = ?, last_name = ?, first_name = ? WHERE identifiant = ?";
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
+        "Nathan17340!");
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, utilisateur.getPassword());
+            preparedStatement.setString(2, utilisateur.getLastName());
+            preparedStatement.setString(3, utilisateur.getFirstName());
+            preparedStatement.setString(4, utilisateur.getIdentifiant());
+            preparedStatement.executeUpdate();
+        }
     }
 
 }

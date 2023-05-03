@@ -2,10 +2,6 @@ package fr.afpa.fourchettes;
 
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
-
-import javafx.util.Callback;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,6 +22,7 @@ public class DAORecette extends DAO<Recette> {
             String selectUsers = "select * from recette where id = " + id;
             ResultSet resultat = stm.executeQuery(selectUsers);
             String resultString = "";
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
             while (resultat.next()) {
 
                 int idRecette = resultat.getInt("id_recette");
@@ -34,12 +31,20 @@ public class DAORecette extends DAO<Recette> {
                 int nbCouverts = resultat.getInt("nombre_couverts");
                 String type = resultat.getString("type_recette");
                 String name = resultat.getString("name");
-                int createur = resultat.getInt("id_createur");
+                int createurId = resultat.getInt("id_createur");
                 Boolean vege = resultat.getBoolean("vege");
                 String preparation = resultat.getString("preparation");
+                Double moyenne = resultat.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+
+                // int id, int restoId, int prepareTime, int nombreCouverts, String name,
+                // String typeRecette, int iDcreateur, boolean vegeOuPas, String preparation,
+                // Double moyenne, Utilisateur createur
+
 
                 resultString = resultString + "-" + id;
-                Recette recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, type, name, createur, vege, preparation);
+                Recette recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                        preparation, moyenne, createur);
                 return recette;
             }
             // fermeture de la requête
@@ -61,116 +66,147 @@ public class DAORecette extends DAO<Recette> {
                 Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM recette")) {
             ArrayList<Recette> result = new ArrayList<>();
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
             while (rs.next()) {
-                int id = rs.getInt("id_recette");
-                String name = rs.getString("name");
+                int idRecette = rs.getInt("id_recette");
+                int idResto = rs.getInt("id_restaurant");
                 int tempsPrepa = rs.getInt("temps_preparation");
-                int nbrCouverts = rs.getInt("nombre_couverts");
+                int nbCouverts = rs.getInt("nombre_couverts");
                 String type = rs.getString("type_recette");
-                boolean vege = rs.getBoolean("vege");
-                String preparation = rs.getString("preparation");
-
-                Recette recette = new Recette(id, 0, tempsPrepa, nbrCouverts, name, type, 0, vege, preparation);
-                result.add(recette);
-            }
-            return result;
-        
-        
-    }catch(
-
-    SQLException e)
-    {
-        e.printStackTrace();
-        return null;
-    }
-    }
-
-    public ArrayList<Recette> findAllEntree() {
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
-                "postgres",
-                "Nathan17340!");
-                Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM recette where type_recette like 'entrée'")) {
-            ArrayList<Recette> result = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id_recette");
                 String name = rs.getString("name");
-                int tempsPrepa = rs.getInt("temps_preparation");
-                int nbrCouverts = rs.getInt("nombre_couverts");
-                String type = rs.getString("type_recette");
-                boolean vege = rs.getBoolean("vege");
+                int createurId = rs.getInt("id_createur");
+                Boolean vege = rs.getBoolean("vege");
                 String preparation = rs.getString("preparation");
+                Double moyenne = rs.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
 
-                Recette recette = new Recette(id, 0, tempsPrepa, nbrCouverts, name, type, 0, vege, preparation);
-                result.add(recette);
-            }
-            return result;
-        
-        
-    }catch(
-
-    SQLException e)
-    {
-        e.printStackTrace();
-        return null;
-    }
-    }
-
-    public ArrayList<Recette> findAllPlat() {
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
-                "postgres",
-                "Nathan17340!");
-                Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM recette where type_recette like 'plat'")) {
-            ArrayList<Recette> result = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id_recette");
-                String name = rs.getString("name");
-                int tempsPrepa = rs.getInt("temps_preparation");
-                int nbrCouverts = rs.getInt("nombre_couverts");
-                String type = rs.getString("type_recette");
-                boolean vege = rs.getBoolean("vege");
-                String preparation = rs.getString("preparation");
-
-                Recette recette = new Recette(id, 0, tempsPrepa, nbrCouverts, name, type, 0, vege, preparation);
+                Recette recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                preparation, moyenne, createur);
                 result.add(recette);
             }
             return result;
 
-        } catch (SQLException e) {
+        } catch (
+
+        SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public ArrayList<Recette> findAllDessert() {
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
-                "postgres",
-                "Nathan17340!");
-                Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM recette where type_recette like 'dessert'")) {
-            ArrayList<Recette> result = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id_recette");
-                String name = rs.getString("name");
-                int tempsPrepa = rs.getInt("temps_preparation");
-                int nbrCouverts = rs.getInt("nombre_couverts");
-                String type = rs.getString("type_recette");
-                boolean vege = rs.getBoolean("vege");
-                String preparation = rs.getString("preparation");
-
-                Recette recette = new Recette(id, 0, tempsPrepa, nbrCouverts, name, type, 0, vege, preparation);
-                result.add(recette);
-
+    public ArrayList<Recette> findByRestoEntree(Restaurant resto) {
+        try {
+            ArrayList<Recette> recettes = new ArrayList<Recette>();
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
+                    "postgres",
+                    "Nathan17340!");
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT * FROM recette where type_recette like 'entrée' and id_restaurant = ?");
+            statement.setInt(1, resto.getId());
+            ResultSet resultSet = statement.executeQuery();
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
+            while (resultSet.next()) {
+                int idRecette = resultSet.getInt("id_recette");
+                int idResto = resultSet.getInt("id_restaurant");
+                int tempsPrepa = resultSet.getInt("temps_preparation");
+                int nbCouverts = resultSet.getInt("nombre_couverts");
+                String type = resultSet.getString("type_recette");
+                String name = resultSet.getString("name");
+                int createurId = resultSet.getInt("id_createur");
+                Boolean vege = resultSet.getBoolean("vege");
+                String preparation = resultSet.getString("preparation");
+                Double moyenne = resultSet.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+                recettes.add(new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                preparation, moyenne, createur));
             }
-            return result;
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return recettes;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
-    public Recette delete(int id) {
+    public ArrayList<Recette> findByRestoPlat(Restaurant resto) {
+        try {
+            ArrayList<Recette> recettes = new ArrayList<Recette>();
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
+                    "postgres",
+                    "Nathan17340!");
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT * FROM recette where type_recette like 'plat' and id_restaurant = ?");
+            statement.setInt(1, resto.getId());
+            ResultSet resultSet = statement.executeQuery();
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
+            while (resultSet.next()) {
+                int idRecette = resultSet.getInt("id_recette");
+                int idResto = resultSet.getInt("id_restaurant");
+                int tempsPrepa = resultSet.getInt("temps_preparation");
+                int nbCouverts = resultSet.getInt("nombre_couverts");
+                String type = resultSet.getString("type_recette");
+                String name = resultSet.getString("name");
+                int createurId = resultSet.getInt("id_createur");
+                Boolean vege = resultSet.getBoolean("vege");
+                String preparation = resultSet.getString("preparation");
+                Double moyenne = resultSet.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+                recettes.add(new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                preparation, moyenne, createur));
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return recettes;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ArrayList<Recette> findByRestoDessert(Restaurant resto) {
+        try {
+            ArrayList<Recette> recettes = new ArrayList<Recette>();
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
+                    "postgres",
+                    "Nathan17340!");
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT * FROM recette where type_recette like 'dessert' and id_restaurant = ?");
+            statement.setInt(1, resto.getId());
+            ResultSet resultSet = statement.executeQuery();
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
+
+            while (resultSet.next()) {
+                int idRecette = resultSet.getInt("id_recette");
+                int idResto = resultSet.getInt("id_restaurant");
+                int tempsPrepa = resultSet.getInt("temps_preparation");
+                int nbCouverts = resultSet.getInt("nombre_couverts");
+                String type = resultSet.getString("type_recette");
+                String name = resultSet.getString("name");
+                int createurId = resultSet.getInt("id_createur");
+                Boolean vege = resultSet.getBoolean("vege");
+                String preparation = resultSet.getString("preparation");
+                Double moyenne = resultSet.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+                recettes.add(new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                preparation, moyenne, createur));
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return recettes;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void delete(int id) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
                     "postgres", "Nathan17340!");
@@ -182,59 +218,72 @@ public class DAORecette extends DAO<Recette> {
             }
             statement.close();
             connection.close();
-            return new Recette(affectedRows, affectedRows, affectedRows, affectedRows, null, null, affectedRows, true, null);
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
     public Recette insert(Recette newrecette) {
         try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
                 "Nathan17340!")) {
-
+    
             // Préparer la requête SQL d'insertion
             String sql = "INSERT INTO recette (id_restaurant, temps_preparation, nombre_couverts, type_recette, name, id_createur, preparation) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
+    
             pstmt.setInt(1, newrecette.getRestoId());
             pstmt.setInt(2, newrecette.getPrepareTime());
             pstmt.setInt(3, newrecette.getNombreCouverts());
             pstmt.setString(4, newrecette.getTypeRecette());
             pstmt.setString(5, newrecette.getName());
-            pstmt.setInt(6, newrecette.getCreateur());
+            
+            // Récupérer l'objet Utilisateur correspondant à l'identifiant du créateur
+            Utilisateur createur = newrecette.getCreateur();
+            if (createur == null) {
+                throw new SQLException("L'utilisateur de la recette n'a pas été trouvé.");
+            }
+            pstmt.setInt(6, createur.getId());
+    
             pstmt.setString(7, newrecette.getPreparation());
-            // Exécuter la requête SQL d'insertion et récupérer l'identifiant de la nouvelle
-            // station
+    
+            // Exécuter la requête SQL d'insertion et récupérer l'identifiant de la nouvelle recette
             int affectedRows = pstmt.executeUpdate();
             ResultSet res = pstmt.getGeneratedKeys();
-
+    
             while (res.next()) {
                 int newId = res.getInt(1);
                 newrecette.setId(newId);
             }
-
+    
             if (affectedRows == 0) {
                 throw new SQLException("Insertion de la recette a échoué, aucune ligne affectée.");
             }
-
+    
             return newrecette;
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+    
+
+    // int id, int restoId, int prepareTime, int nombreCouverts, String name,
+    // String typeRecette, boolean vegeOuPas, String preparation,
+    // Double moyenne, Utilisateur createur
 
     public Recette getRecetteById(String id) {
         String query = "SELECT * FROM recette WHERE name = ?";
-        Recette recette = new Recette(0, 0, 0, 0, query, query, 0, true, query);
+        Recette recette = new Recette(0, 0, 0, 0, query, query, true, query, 0.0, null);
 
         try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
                 "Nathan17340!");
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, recette.getName());
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
 
             ResultSet rs = stmt.executeQuery();
 
@@ -245,16 +294,54 @@ public class DAORecette extends DAO<Recette> {
                 int nbCouverts = rs.getInt("nombre_couverts");
                 String type = rs.getString("type_recette");
                 String name = rs.getString("name");
-                int createur = rs.getInt("id_createur");
+                int createurId = rs.getInt("id_createur");
                 Boolean vege = rs.getBoolean("vege");
                 String preparation = rs.getString("preparation");
-                recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, type, name, createur, vege, preparation);
+                Double moyenne = rs.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+                recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                preparation, moyenne, createur);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         return recette;
+    }
+
+    public ArrayList<Recette> findByRestoId(Restaurant restaurant) {
+        ArrayList<Recette> recettes = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes",
+                    "postgres", "Nathan17340!");
+            String query = "SELECT * FROM recette WHERE id_restaurant = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, restaurant.getId());
+            ResultSet resultSet = statement.executeQuery();
+            DAOUtilisateur daoutilisateur = new DAOUtilisateur();
+
+
+            while (resultSet.next()) {
+                int idRecette = resultSet.getInt("id_recette");
+                int idResto = resultSet.getInt("id_restaurant");
+                int tempsPrepa = resultSet.getInt("temps_preparation");
+                int nbCouverts = resultSet.getInt("nombre_couverts");
+                String type = resultSet.getString("type_recette");
+                String name = resultSet.getString("name");
+                int createurId = resultSet.getInt("id_createur");
+                Boolean vege = resultSet.getBoolean("vege");
+                String preparation = resultSet.getString("preparation");
+                Double moyenne = resultSet.getDouble("moyenne");
+                Utilisateur createur = daoutilisateur.find(createurId);
+
+                Recette recette = new Recette(idRecette, idResto, tempsPrepa, nbCouverts, name, type, vege,
+                        preparation, moyenne, createur);
+                recettes.add(recette);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recettes;
     }
 
 }

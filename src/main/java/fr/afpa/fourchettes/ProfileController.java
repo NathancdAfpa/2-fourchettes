@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,6 +43,9 @@ public class ProfileController {
     @FXML
     private Button retour;
 
+    private String fileName;
+    
+
     @FXML
     void addretour(ActionEvent event) throws IOException {
         Stage stage = (Stage) retour.getScene().getWindow();
@@ -72,7 +76,7 @@ public class ProfileController {
                 Image image = new Image(input);
                 // Afficher l'image dans l'ImageView
                 img.setImage(image);
-                saveImage(selectedFile);
+                fileName = saveImage(selectedFile, 0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -81,31 +85,42 @@ public class ProfileController {
         }
     }
 
-    private void saveImage(File file) throws IOException {
+    private String saveImage(File file, int userId) throws IOException {
+        // Générer un nom de fichier unique avec UUID
+        String fileName = UUID.randomUUID().toString() + ".png";
         // Créer un fichier pour stocker l'image
-        File imageFile = new File("userProfileImage.png");
+        File imageFile = new File(fileName);
         // Copier le contenu du fichier sélectionné dans le fichier de l'utilisateur
         Files.copy(file.toPath(), imageFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        return fileName;
     }
 
-    private void loadProfileImage() {
-        // Vérifier si le fichier de l'utilisateur existe
-        File imageFile = new File("userProfileImage.png");
-        if (imageFile.exists()) {
-            try {
-                // Charger le contenu du fichier dans une Image
+    private void loadProfileImage(String fileName) throws IOException {
+        try {
+            // Créer un fichier à partir du nom de fichier passé en paramètre
+            File imageFile = new File(fileName);
+            // Vérifier si le fichier existe
+            if (imageFile.exists()) {
+                // Créer une Image à partir du contenu du fichier
                 Image image = new Image(new FileInputStream(imageFile));
                 // Afficher l'image dans l'ImageView
                 img.setImage(image);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            } else {
+                // Si le fichier n'existe pas, afficher une image par défaut
+              
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
+    
+    
+
+    
 
     @FXML
-    public void initialize() {
-        loadProfileImage();
-    }
+    public void initialize() throws IOException {
+        fileName = UUID.randomUUID().toString() + ".png";
+        loadProfileImage(fileName);    }
 
 }

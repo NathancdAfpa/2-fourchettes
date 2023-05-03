@@ -1,9 +1,12 @@
 package fr.afpa.fourchettes;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Restaurant {
     
     private int id;
-    private String name;
+    private StringProperty name;
     private String adresse;
     private String ville;
     private String numeroDeTelephone;
@@ -11,7 +14,7 @@ public class Restaurant {
     
     public Restaurant(int id, String name, String adresse, String ville, String numeroDeTelephone, String email) {
         this.id = id;
-        this.name = name;
+        this.name = new SimpleStringProperty(name);
         this.adresse = adresse;
         this.ville = ville;
         this.numeroDeTelephone = numeroDeTelephone;
@@ -26,12 +29,16 @@ public class Restaurant {
         this.id = id;
     }
 
-    public String getName() {
+    public StringProperty NameProperty() {
         return name;
     }
-
+    
+    public String getName() {
+        return name.get();
+    }
+    
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public String getAdresse() {
@@ -64,6 +71,11 @@ public class Restaurant {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return  name.get();
     }
     
 }

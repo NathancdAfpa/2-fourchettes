@@ -20,6 +20,7 @@ public Utilisateur(int id, String identifiant, int restoId, String lastName, Str
     this.lastName = new SimpleStringProperty(lastName);
     this.firstName = new SimpleStringProperty(firstName);
     this.password = new SimpleStringProperty(password);
+
 }
 
 
@@ -92,7 +93,13 @@ public void setPassword(String password) {
     this.password.set(password);
 }
 
+
 public Utilisateur checkUser(String string, int int1, String string2, String string3, String string4) {
+    return null;
+}
+
+
+public Utilisateur getCreateur() {
     return null;
 }
 

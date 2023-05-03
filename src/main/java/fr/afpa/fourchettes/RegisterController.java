@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,6 +35,33 @@ public class RegisterController {
     private Button signin;
 
     @FXML
+    private Label adresseressto;
+
+    @FXML
+    private Label email;
+
+    @FXML
+    private Label mailresto;
+
+    @FXML
+    private Label nomlab;
+
+    @FXML
+    private TextField tville;
+
+    @FXML
+    private Label villeresto;
+
+    @FXML
+    private TextField tadress;
+
+    @FXML
+    private Label telresto;
+
+    @FXML
+    private Label nomresto;
+
+    @FXML
     private Label title;
 
     @FXML
@@ -48,9 +74,17 @@ public class RegisterController {
     private TextField tnom;
 
     @FXML
+    private TextField tnomresto;
+
+    @FXML
+    private TextField tnum;
+
+    @FXML
     private TextField tprenom;
 
     private ObservableList<Utilisateur> utilisateur = FXCollections.observableArrayList();
+
+    private ObservableList<Restaurant> restaurant = FXCollections.observableArrayList();
 
     @FXML
     void addretour(ActionEvent event) throws IOException {
@@ -63,8 +97,24 @@ public class RegisterController {
 
     @FXML
     void register(ActionEvent event) throws IOException {
-        Utilisateur newUtilisateur = new Utilisateur(0, tnom.getText(), 0, tprenom.getText(), tmail.getText(), tmdp.getText());
+        
+        Restaurant newResto = new Restaurant(0, tnomresto.getText(), tadress.getText(), tville.getText(),
+                tnum.getText(), tmail.getText());
+        DAORestaurant daoRestaurant = new DAORestaurant();
+
+        daoRestaurant.insert(newResto);
+        restaurant.add(newResto);
+
+        tnomresto.clear();
+        tadress.clear();
+        tville.clear();
+        tnum.clear();
+        tmail.clear();
+
+        Utilisateur newUtilisateur = new Utilisateur(0, tnom.getText(), newResto.getId(), tprenom.getText(), tmail.getText(),
+                tmdp.getText());
         DAOUtilisateur daoUtilisateur = new DAOUtilisateur();
+        
         daoUtilisateur.insert(newUtilisateur);
         utilisateur.add(newUtilisateur);
 
@@ -82,8 +132,11 @@ public class RegisterController {
 
     @FXML
     public void initialize() {
-    DAOUtilisateur daoUtilisateur = new DAOUtilisateur();
-    utilisateur = FXCollections.observableArrayList(daoUtilisateur.findAll());
+        DAOUtilisateur daoUtilisateur = new DAOUtilisateur();
+        utilisateur = FXCollections.observableArrayList(daoUtilisateur.findAll());
+
+        DAORestaurant daorestaurant = new DAORestaurant();
+        restaurant = FXCollections.observableArrayList(daorestaurant.findAll());
     }
 
     private void showAlert(String message) {

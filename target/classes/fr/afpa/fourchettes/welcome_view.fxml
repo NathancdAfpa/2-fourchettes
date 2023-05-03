@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="630.4" prefWidth="916.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.WelcomeController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.WelcomeController">
    <children>
-      <BorderPane maxWidth="630.4" minWidth="630.4" prefWidth="630.4" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <HBox style="-fx-background-color: pink; -fx-border-style: solid; -fx-border-width: 2;" BorderPane.alignment="TOP_LEFT">
                <children>
@@ -104,14 +104,14 @@
                <children>
                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="entree" nodeOrientation="LEFT_TO_RIGHT" prefHeight="66.0" prefWidth="271.0" text="Entrées" VBox.vgrow="ALWAYS">
+                        <Label fx:id="entree" nodeOrientation="LEFT_TO_RIGHT" text="Entrées" VBox.vgrow="ALWAYS">
                            <font>
-                              <Font name="System Bold" size="45.0" />
+                              <Font name="System Bold" size="60.0" />
                            </font>
                         </Label>
                         <Button fx:id="btEntree" mnemonicParsing="false" onAction="#addEntree" VBox.vgrow="ALWAYS">
                            <graphic>
-                              <ImageView fx:id="im1" fitHeight="307.0" fitWidth="262.0">
+                              <ImageView fx:id="im1" fitHeight="470.0" fitWidth="553.0">
                                  <image>
                                     <Image url="@entrée.png" />
                                  </image>
@@ -123,16 +123,16 @@
                         </Button>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" maxWidth="630.4" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="plats" prefHeight="66.0" prefWidth="314.0" text="Plats">
+                        <Label fx:id="plats" text="Plats">
                            <font>
-                              <Font name="System Bold" size="45.0" />
+                              <Font name="System Bold" size="59.0" />
                            </font>
                         </Label>
                         <Button fx:id="btnPlat" mnemonicParsing="false" onAction="#addPlat">
                            <graphic>
-                              <ImageView fx:id="im2" fitHeight="305.0" fitWidth="314.0">
+                              <ImageView fx:id="im2" fitHeight="470.0" fitWidth="434.0">
                                  <image>
                                     <Image url="@plat.png" />
                                  </image>
@@ -146,14 +146,14 @@
                   </VBox>
                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="dessert" prefHeight="66.0" prefWidth="299.0" text="Desserts">
+                        <Label fx:id="dessert" prefHeight="66.0" text="Desserts">
                            <font>
-                              <Font name="System Bold" size="45.0" />
+                              <Font name="System Bold" size="60.0" />
                            </font>
                         </Label>
                         <Button fx:id="btnDessert" mnemonicParsing="false" onAction="#addDessert">
                            <graphic>
-                              <ImageView fx:id="im3" fitHeight="303.0" fitWidth="291.0">
+                              <ImageView fx:id="im3" fitHeight="472.0" fitWidth="457.0">
                                  <image>
                                     <Image url="@dessert.png" />
                                  </image>

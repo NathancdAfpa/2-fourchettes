@@ -2,9 +2,6 @@ package fr.afpa.fourchettes;
 
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import javafx.util.Callback;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -142,7 +139,7 @@ public class DAOIngredient extends DAO<Ingredient> {
     
     
 
-    public Ingredient delete(int id) {
+    public void delete(int id) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres", "Nathan17340!");
             PreparedStatement statement = connection.prepareStatement("DELETE FROM ingredient WHERE id_ingredient = ?");
@@ -153,12 +150,10 @@ public class DAOIngredient extends DAO<Ingredient> {
             }
             statement.close();
             connection.close();
-            return new Ingredient(affectedRows, null, affectedRows, affectedRows, null);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
     public void deleteByRecetteId(int recetteId) {

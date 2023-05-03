@@ -57,7 +57,7 @@
                                  </font>
                               </Label>
                               <TextField fx:id="tMdp" onAction="#cansee" prefHeight="51.0" prefWidth="318.0" style="-fx-border-style: solid; -fx-border-width: 2;" />
-                              <Button fx:id="see" mnemonicParsing="false" onAction="#cansee">
+                              <Button fx:id="see" mnemonicParsing="false" onAction="#cansee" onKeyPressed="#onKeyPressed" onKeyTyped="#onKeyTyped">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>

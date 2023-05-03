@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.afpa.fourchettes.RegisterController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -30,9 +29,9 @@
             </HBox>
          </top>
          <center>
-            <HBox spacing="10.0" BorderPane.alignment="CENTER">
+            <HBox prefHeight="444.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="TOP_RIGHT" prefHeight="352.0" prefWidth="321.0" spacing="33.0">
+                  <VBox alignment="TOP_RIGHT" prefHeight="352.0" prefWidth="600.0" spacing="33.0">
                      <children>
                         <Label fx:id="nom" text="E-mail :">
                            <font>
@@ -59,7 +58,7 @@
                         <Insets left="20.0" top="85.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="338.0" prefWidth="194.0" spacing="50.0" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="338.0" prefWidth="400.0" spacing="50.0" HBox.hgrow="ALWAYS">
                      <children>
                         <TextField fx:id="tnom" prefHeight="60.0" prefWidth="268.0" />
                         <TextField fx:id="tprenom" prefHeight="60.0" prefWidth="268.0" />
@@ -76,6 +75,50 @@
                      </children>
                      <HBox.margin>
                         <Insets right="200.0" top="100.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="TOP_RIGHT" prefWidth="750.0" spacing="33.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="nomresto" text="Nom restaurant :">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="adresseressto" text="Adresse restaurant :">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="villeresto" text="Ville restaurant :">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="telresto" text="Téléphone restaurant :">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="mailresto" text="E-mail restaurant :">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="20.0" top="85.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefWidth="500.0" spacing="50.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextField fx:id="tnomresto" prefHeight="60.0" prefWidth="268.0" />
+                        <TextField fx:id="tadress" prefHeight="60.0" prefWidth="268.0" />
+                        <TextField fx:id="tville" prefHeight="60.0" prefWidth="268.0" />
+                        <TextField fx:id="tnum" prefHeight="60.0" prefWidth="268.0" />
+                        <TextField fx:id="tmail" prefHeight="60.0" prefWidth="268.0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="100.0" top="100.0" />
                      </HBox.margin>
                   </VBox>
                </children>

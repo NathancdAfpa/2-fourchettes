@@ -1,6 +1,7 @@
 package fr.afpa.fourchettes;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -73,15 +73,12 @@ public class LogController {
 
     @FXML
     void onKeyTyped(KeyEvent key) {
-
         motdepasse = motdepasse + key.getCharacter();
         System.out.println(motdepasse);
-
     }
 
     @FXML
     void onKeyPressed(KeyEvent event) {
-
         for (int i = 0; i > 0; i--) {
 
             if (motdepasse.contains(bc)) {
@@ -91,11 +88,10 @@ public class LogController {
             }
 
         }
-
     }
 
     @FXML
-    void cansee(ActionEvent event) {
+    public void cansee(ActionEvent event) {
 
         motdepasse = motdepasse.substring(0, tMdp.getLength());
 
@@ -114,17 +110,21 @@ public class LogController {
         }
     }
 
-
-/**
- * Méthode checkLogin qui permet de vérifier les informations de l'utilisateur en instanciant également le singleton (classe session).
- * 
- */
-    private boolean checkLogin(String identifiant, String password) {
+    /**
+     * Méthode checkLogin qui permet de vérifier les informations de l'utilisateur
+     * en instanciant également le singleton (classe session).
+     * 
+     * @throws SQLException
+     * 
+     */
+    @FXML
+    private boolean checkLogin(String identifiant, String password) throws SQLException {
         DAOUtilisateur daoUtilisateur = new DAOUtilisateur();
-        Utilisateur utilisateur = daoUtilisateur.getUtilisateurById(identifiant);
+        utilisateur = daoUtilisateur.getUtilisateurById(identifiant);
 
         if (utilisateur != null && utilisateur.getPassword().equals(password)) {
-            Session.getInstance(utilisateur);
+            Session session = Session.getInstance(utilisateur);
+            session.setUser(utilisateur);
             return true;
         } else {
             return false;
@@ -132,16 +132,16 @@ public class LogController {
     }
 
     @FXML
-    void addLog(ActionEvent event) throws IOException {
+    void addLog(ActionEvent event) throws IOException, SQLException {
         if (checkLogin(tId.getText(), tMdp.getText())) {
+            Session.getInstance().setUser(utilisateur);
             Stage stage = (Stage) btLog.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("welcome_view.fxml"));
             Parent root = loader.load();
             WelcomeController accueil = loader.getController();
-            this.utilisateur = utilisateur;
             accueil.setIdentifiant(tId.getText());
             accueil.setPassword(tMdp.getText());
-            accueil.setUtilisateur(users);
+            accueil.setUtilisateur(utilisateur);
             stage.getScene().setRoot(root);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -155,8 +155,8 @@ public class LogController {
     @FXML
     void initialize() {
         mdpVisible = false;
-        tId.setText("jeandupont@live.fr");
-        tMdp.setText("salut");
+        // tId.setText("jeandupont@live.fr");
+        // tMdp.setText("salut");
 
         tMdp.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -180,10 +180,9 @@ public class LogController {
         stage.getScene().setRoot(root);
     }
 
-
     @FXML
     void profilePage(ActionEvent event) {
 
     }
-    
+
 }

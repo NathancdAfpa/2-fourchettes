@@ -26,13 +26,21 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class EditionRecetteController {
 
     @FXML
-    private TextField TnbrCouverts;
+    private Button moins;
+
+    @FXML
+    private Button more;
 
     @FXML
     private TextArea area;
@@ -57,6 +65,9 @@ public class EditionRecetteController {
 
     @FXML
     private RadioButton no;
+
+    @FXML
+    private Label num;
 
     @FXML
     private TableColumn<Ingredient, String> colname;
@@ -125,19 +136,20 @@ public class EditionRecetteController {
 
     @FXML
     void addAjout(ActionEvent event) {
-        String nom = tNom.getText();
-        int createur = Session.getInstance().user.getId();
-        String createurPrenom = Session.getInstance().user.getFirstName();
-        String createurNom = Session.getInstance().user.getLastName();
 
-        int nbCouverts = Integer.parseInt(TnbrCouverts.getText());
+        // Before calling the addAjout method
+        String nom = tNom.getText();
+        int nbCouverts = Integer.parseInt(num.getText());
         int temps = Integer.parseInt(tTime.getText());
         boolean vege = yes.isSelected();
         String type = "";
         String prepa = preparation.getText();
-        // String name = colname.getText();
-        // int quantity = Integer.parseInt(colquantity.getText());
-        // String unit = colUnit.getText();
+        int idResto = Session.getInstance().user.getRestoId();
+        Double moyenne = (Session.getInstance().recette != null)
+                ? Double.parseDouble(String.valueOf(Session.getInstance().recette.getMoyenne()))
+                : 0.0;
+        Utilisateur createUtilisateur = Session.getInstance().user;
+             
 
         if (checkEntree.isSelected()) {
             type = "entrée";
@@ -147,84 +159,62 @@ public class EditionRecetteController {
             type = "dessert";
         }
 
+        // int restoId, int prepareTime, int nombreCouverts, String name,
+        // String typeRecette, int iDcreateur, boolean vegeOuPas, String preparation,
+        // String nomCreateur,
+        // Double moyenne
         // Save recipe data
-        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fourchettes", "postgres",
-                "Nathan17340!")) {
-            // Insert recipe data into the "recette" table
-            String insertRecipeSql = "INSERT INTO recette (name, id_createur, nombre_couverts, temps_preparation, vege, type_recette, preparation) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(insertRecipeSql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, nom);
-            stmt.setInt(2, createur);
-            stmt.setInt(3, nbCouverts);
-            stmt.setInt(4, temps);
-            stmt.setBoolean(5, vege);
-            stmt.setString(6, type);
-            stmt.setString(7, prepa);
+        Recette newRecette = new Recette(idResto, temps, nbCouverts, nom, type, vege, prepa, moyenne,
+                createUtilisateur);
+        DAORecette daorecette = new DAORecette();
+        daorecette.insert(newRecette);
 
-            stmt.executeUpdate();
+        // Get ingredient data from the table view
+        ArrayList<Integer> quantities = new ArrayList<>();
+        ObservableList<Ingredient> listIngredient = tvIng.getItems();
 
-            // Get the ID of the newly inserted recipe
-            ResultSet rs = stmt.getGeneratedKeys();
-            int recipeId = 0;
-            if (rs.next()) {
-                recipeId = rs.getInt(1);
-            }
+        for (Ingredient ingredient : listIngredient) {
+            quantities.add(ingredient.getQuantite());
 
-            // Get ingredient data from the "tIngredients" and "tQuantite" fields
-            StringBuilder sb = new StringBuilder();
+            Ingredient newIngredient = new Ingredient(ingredient.getNom(), ingredient.getQuantite(), newRecette.getId(),
+                    ingredient.getUnite());
+            DAOIngredient daoIngredient = new DAOIngredient();
+            daoIngredient.insert(newIngredient);
 
-            ArrayList<String> ingredients = new ArrayList<>();
-            ArrayList<Integer> quantities = new ArrayList<>();
-            ArrayList<String> unities = new ArrayList<>();
-
-            for (int i = 0; i < tvIng.getItems().size(); i++) {
-                String name = tvIng.getColumns().get(0).getCellData(i).toString();
-                String quantity = tvIng.getColumns().get(1).getCellData(i).toString();
-                String unit = tvIng.getColumns().get(2).getCellData(i).toString();
-
-                sb.append(name).append("\t").append(quantity).append("\t").append(unit).append("\n");
-                ingredients.add(name);
-                quantities.add(Integer.parseInt(quantity));
-                unities.add(unit);
-            }
-
-            // Insert ingredient data into the "ingredients" table
-            for (int i = 0; i < ingredients.size(); i++) {
-                String insertIngredientSql = "INSERT INTO ingredient (nom, quantite, unite, id_recette) VALUES (?, ?, ?, ?)";
-                stmt = conn.prepareStatement(insertIngredientSql);
-                stmt.setString(1, ingredients.get(i));
-                stmt.setInt(2, quantities.get(i));
-                stmt.setString(3, unities.get(i));
-                stmt.setInt(4, recipeId);
-                stmt.executeUpdate();
-
-            }
-
-            // Add the recipe data to the text area
-            String recette = String.format(
-                    "Nom: %s\nNombre de couverts: %s\nCrée par : %s %s\nTemps :  %s\nVégétarien : %s\n\nInstructions : %s\n\nIngrédients :\n ",
-                    nom, nbCouverts, createurPrenom, createurNom, temps, vege, prepa);
-            for (int i = 0; i < ingredients.size(); i++) {
-                recette += String.format("%s : %s : %s\n", ingredients.get(i), quantities.get(i), unities.get(i));
-            }
-            if (area.getText().isEmpty()) {
-                area.setText(recette);
-            } else {
-                area.appendText("\n\n");
-                area.appendText(recette);
-            }
-
-            tNom.clear();
-            TnbrCouverts.clear();
-            tTime.clear();
-            yes.setSelected(false);
-            preparation.clear();
-            checkEntree.setSelected(false);
-            checkPlat.setSelected(false);
-            checkDessert.setSelected(false);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
+
+        // Multiply quantities by the number of couverts
+        for (int i = 0; i < quantities.size(); i++) {
+            int multipliedQuantity = quantities.get(i) * nbCouverts;
+            quantities.set(i, multipliedQuantity);
+        }
+
+        // Insert ingredient data into the "ingredients" table
+
+        // Add the recipe data to the text area
+        String recetteText = String.format(
+                "Nom: %s\nNombre de couverts: %s\nCrée par : %s %s\nTemps de préparation :  %s\nVégétarien : %s\n\nInstructions : %s\n\nIngrédients :\n ",
+                nom, nbCouverts, createUtilisateur.getFirstName(), createUtilisateur.getLastName(), temps + " minutes", vege, prepa);
+
+        for (int i = 0; i < listIngredient.size(); i++) {
+            Ingredient newIngredient = listIngredient.get(i);
+            recetteText += String.format("%s : %s: %s\n", newIngredient.getNom(), quantities.get(i),
+                    newIngredient.getUnite());
+        }
+        if (area.getText().isEmpty()) {
+            area.setText(recetteText);
+        } else {
+            area.appendText("\n\n");
+            area.appendText(recetteText);
+        }
+
+        tNom.clear();
+        tTime.clear();
+        yes.setSelected(false);
+        preparation.clear();
+        checkEntree.setSelected(false);
+        checkPlat.setSelected(false);
+        checkDessert.setSelected(false);
     }
 
     @FXML
@@ -232,7 +222,9 @@ public class EditionRecetteController {
         String nom = tNom.getText();
         String texte = area.getText();
         String prepa = preparation.getText();
-        Recette recette = new Recette(0, 0, 0, 0, nom, texte, 0, true, prepa);
+        Utilisateur createUtilisateure = Session.getInstance().recette.getCreateur();
+
+        Recette recette = new Recette(0, 0, 0, 0, nom, texte, true, prepa, 0.0, createUtilisateure);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Entree.fxml"));
         Parent root = loader.load();
@@ -253,13 +245,30 @@ public class EditionRecetteController {
     }
 
     @FXML
+    void addMore(ActionEvent event) {
+        int currentValue = Integer.parseInt(num.getText());
+        int newValue = currentValue + 1;
+        num.setText(String.valueOf(newValue));
+        updateQuantities(newValue);
+    }
+
+    @FXML
+    void addMoins(ActionEvent event) {
+        int currentNumberOfGuests = Integer.parseInt(num.getText());
+        if (currentNumberOfGuests > 1) {
+            int newNumberOfGuests = currentNumberOfGuests - 1;
+            num.setText(Integer.toString(newNumberOfGuests));
+            updateQuantities(newNumberOfGuests);
+        }
+    }
+
+    @FXML
     void initialize() {
-        TnbrCouverts.setOnMouseClicked(event -> area.clear());
+        num.setOnMouseClicked(event -> area.clear());
         tNom.setOnMouseClicked(event -> area.clear());
         tTime.setOnMouseClicked(event -> area.clear());
         yes.setOnMouseClicked(event -> area.clear());
         preparation.setOnMouseClicked(event -> area.clear());
-
 
         colname.setCellValueFactory(event -> event.getValue().getNomProperty());
         colname.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow())
@@ -279,6 +288,42 @@ public class EditionRecetteController {
         colname.setCellFactory(TextFieldTableCell.forTableColumn());
         colquantity.setCellFactory(TextFieldTableCell.forTableColumn());
         colUnit.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        num.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateQuantities(Integer.parseInt(newValue));
+        });
+
+        num.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                int newNumberOfGuests = Integer.parseInt(newValue);
+                for (Ingredient ingredient : ingredient) {
+                    int oldQuantity = ingredient.getQuantite();
+                    int newQuantity;
+                    if (newNumberOfGuests == 0) {
+                        newQuantity = 0; // Éviter une division par zéro
+                    } else {
+                        newQuantity = oldQuantity * newNumberOfGuests / Integer.parseInt(oldValue);
+                    }
+                    ingredient.setQuantite(newQuantity);
+                }
+                tvIng.refresh(); // Rafraîchir la TableView pour afficher les nouvelles quantités
+            }
+        });
+
+    }
+
+    private void updateQuantities(int newNumberOfGuests) {
+        for (Ingredient ingredient : ingredient) {
+            int oldQuantity = ingredient.getQuantite();
+            int newQuantity;
+            if (newNumberOfGuests == 0) {
+                newQuantity = 0; // Éviter une division par zéro
+            } else {
+                newQuantity = oldQuantity * newNumberOfGuests / Integer.parseInt(num.getText());
+            }
+            ingredient.setQuantite(newQuantity);
+        }
+        tvIng.refresh(); // Rafraîchir la TableView pour afficher les nouvelles quantités
     }
 
 }

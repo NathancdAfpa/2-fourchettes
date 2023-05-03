@@ -1,13 +1,10 @@
 package fr.afpa.fourchettes;
 
 import java.io.IOException;
-
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -69,6 +66,14 @@ public class WelcomeController {
 
     private Utilisateur utilisateur;
 
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+        Session session = Session.getInstance(utilisateur); // Crée une instance de session avec l'utilisateur
+        session.setUser(utilisateur); // Définit l'utilisateur dans la session
+        System.out.println(utilisateur.getFirstName());
+    }
+    
+
     @FXML
     void addDessert(ActionEvent event) throws IOException {
         Stage stage = (Stage) btnDessert.getScene().getWindow();
@@ -114,15 +119,13 @@ public class WelcomeController {
     public void setPassword(String text) {
     }
 
-    public void setUtilisateur(ObservableList<Utilisateur> users) {
-    }
-
     public void setIdentifiant(String text) {
     }
-    
 
     @FXML
     void addDeco(ActionEvent event) throws IOException {
+        Session.getInstance().resetUser();
+
         Stage stage = (Stage) deco.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("log_view.fxml"));
         Parent root = loader.load();
@@ -146,6 +149,10 @@ public class WelcomeController {
         Parent root = loader.load();
         ProfileController user = loader.getController();
         stage.getScene().setRoot(root);
+    }
+
+    public ImageView getProfilePhoto() {
+        return null;
     }
 
 }

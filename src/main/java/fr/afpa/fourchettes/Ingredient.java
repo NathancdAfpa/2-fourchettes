@@ -18,6 +18,12 @@ public class Ingredient {
         this.unite = new SimpleStringProperty(unite);
     }
 
+    public Ingredient(String nom, int quantite, int idRecette, String unite) {
+        this.nom = new SimpleStringProperty(nom);
+        this.quantite = quantite;
+        this.unite = new SimpleStringProperty(unite);
+    }
+
     public Ingredient() {
         this.nom = new SimpleStringProperty();
         this.unite = new SimpleStringProperty();
